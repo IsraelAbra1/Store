@@ -107,29 +107,29 @@ public class FB {
         myRef.setValue(rec);
     }
 
-    public void setUserData(String fullName, String email, String profileImage)
+    public void setUserData(String email, String name, String profileImage)
     {
         String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
         String base64Image = profileImage;
         //User user = new User("Moshe Cohen", "moshe@example.com", System.currentTimeMillis(), base64Image);
         long signUpTime = System.currentTimeMillis();
-        User user = new User(fullName, email, signUpTime, profileImage);
+        User user = new User(name, email, signUpTime, profileImage);
 
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
         ref.child("users").child(uid).setValue(user);
 
     }
 
-    public void setOrder(String orderId, String productName, int quantity, double price, boolean delivered, String deliveryDate)
+    public void setOrder(String productName, int quantity, double price, boolean delivered)
     {
         String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
 
-        String orderIddd = ref.child("user_data").child(uid).child("orders").push().getKey();
-        Order order = new Order(orderId, "Running Shoes", 2, 179.99, false, "2025-04-20");
+        String orderId = ref.child("user_data").child(uid).child("orders").push().getKey();
+        Order order = new Order(orderId, productName, quantity, price, delivered);
 
-        ref.child("user_data").child(uid).child("orders").child(orderIddd).setValue(order);
+        ref.child("user_data").child(uid).child("orders").child(orderId).setValue(order);
 
     }
 }

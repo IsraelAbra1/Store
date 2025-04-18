@@ -8,7 +8,9 @@ import android.util.Base64;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -21,12 +23,12 @@ import java.util.ArrayList;
 
 public class WelcomeActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private EditText etName;
-    private EditText etRecord;
+    private EditText etProductName, etQuantity, etPrice;
+    private Switch boolSwitch;
+
     private TextView tvWelcome;
-    private Button btnAddRecordToDB, btnAddPrivateRecordToDB;
+    private Button btnAddPrivateOrderToDB;
     private Button btnLogout;
-    private Button btnTakePicture;
 
     private RecordAdapter adapter;
     private ArrayList<MyRecord> myRecords;
@@ -41,33 +43,33 @@ public class WelcomeActivity extends AppCompatActivity implements View.OnClickLi
         fb = new FB(this, myRecords);
 
         Intent intent = getIntent();
-        String email = intent.getStringExtra("email");
-        String password = intent.getStringExtra("password");
-        String imageBitmap = intent.getStringExtra("imageBitmap");
-        //long signUpTime = System.currentTimeMillis();
-        fb.setUserData(email, password, imageBitmap);
+        if(intent.getExtras() != null)
+        {
+            String email = intent.getStringExtra("email");
+            String name = intent.getStringExtra("name");
+            String imageBitmap = intent.getStringExtra("imageBitmap");
+            //long signUpTime = System.currentTimeMillis();
+            fb.setUserData(email, name, imageBitmap);
+        }
+
 
 /*        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.person_96);
         String profileImage = encodeImageToBase64(bitmap);
-
-        fb.setUserData("","",0,profileImage);
-        fb.setOrder("","",0,0,false,"");
         */
     }
 
     private void initialization() {
         // initialize
-        etName = findViewById(R.id.etName);
-        etRecord = findViewById(R.id.etScore);
-        tvWelcome = findViewById(R.id.tvWelcome);
-        btnAddRecordToDB = findViewById(R.id.btnAddRecordToDB);
-        btnAddRecordToDB.setOnClickListener(this);
-        btnAddPrivateRecordToDB = findViewById(R.id.btnAddPrivateRecordToDB);
-        btnAddPrivateRecordToDB.setOnClickListener(this);
+
+        etProductName = findViewById(R.id.etProductName);
+        etQuantity = findViewById(R.id.etQuantity);
+        etPrice = findViewById(R.id.etPrice);
+        boolSwitch = findViewById(R.id.switchDelivered);
+
+        btnAddPrivateOrderToDB = findViewById(R.id.btnAddPrivateOrderToDB);
+        btnAddPrivateOrderToDB.setOnClickListener(this);
         btnLogout = findViewById(R.id.btnLogout);
         btnLogout.setOnClickListener(this);
-        btnTakePicture = findViewById(R.id.btnTakePicture);
-        btnTakePicture.setOnClickListener(this);
 
         RecyclerView recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this)); // to be vertical
@@ -83,23 +85,42 @@ public class WelcomeActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     public void userDataChange(MyRecord currentRecord) {
-        tvWelcome.setText("" + currentRecord.getName() + " : " + currentRecord.getScore() + " points");
+        //tvWelcome.setText("" + currentRecord.getName() + " : " + currentRecord.getScore() + " points");
+        Toast.makeText(this, "userDataChange", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onClick(View view) {
-        if(view == btnAddRecordToDB)
-        {
-            // save the record in the firebase
-            //fb.setRecord(etName.getText().toString(), Integer.parseInt(etRecord.getText().toString()));
-            fb.setRecord(etName.getText().toString(), Integer.parseInt(etRecord.getText().toString()));
-        }
 
-        if(view == btnAddPrivateRecordToDB)
-        {
-            // save the record in the firebase
-            //fb.setRecord(etName.getText().toString(), Integer.parseInt(etRecord.getText().toString()));
-            fb.setPrivateRecord(etName.getText().toString(), Integer.parseInt(etRecord.getText().toString()));
+
+        if (view == btnAddPrivateOrderToDB) {
+            String productName = etProductName.getText().toString().trim();
+            String quantityStr = etQuantity.getText().toString().trim();
+            String priceStr = etPrice.getText().toString().trim();
+            boolean isDelivered = boolSwitch.isChecked();
+
+            // Basic validation
+            if (productName.isEmpty() || quantityStr.isEmpty() || priceStr.isEmpty()) {
+                // Show an error message to the user (e.g., using a Toast)
+                Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            int quantity;
+            double price;
+            try {
+                quantity = Integer.parseInt(quantityStr);
+                price = Double.parseDouble(priceStr);
+            } catch (NumberFormatException e) {
+                // Show an error message to the user (e.g., using a Toast)
+                Toast.makeText(this, "Invalid quantity or price", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            // Call the setOrder method with the validated data
+            fb.setOrder(productName, quantity, price, isDelivered);
+            // Optionally, show a success message
+            Toast.makeText(this, "Order added successfully", Toast.LENGTH_SHORT).show();
         }
 
         if(view == btnLogout)
@@ -108,11 +129,7 @@ public class WelcomeActivity extends AppCompatActivity implements View.OnClickLi
             finish(); // close the activity
         }
 
-        if(view == btnTakePicture)
-        {
-            Intent intent = new Intent(this, TakePictureActivity.class);
-            startActivity(intent);
-        }
+
     }
 
     public String encodeImageToBase64(Bitmap bitmap) {

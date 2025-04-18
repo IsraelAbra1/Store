@@ -34,7 +34,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     private ActivityResultLauncher<Intent> takePictureActivityResultLauncher;
 
     private Button btnRegister, btnTakePicture;
-    private EditText etEmailAddress, etNumberPassword;
+    private EditText etEmailAddress, etNumberPassword, etName;
     private ImageView imageView;
     private Bitmap imageBitmap;
     @Override
@@ -50,6 +50,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
         etEmailAddress = findViewById(R.id.etEmailAddress);
         etNumberPassword = findViewById(R.id.etNumberPassword);
+        etName = findViewById(R.id.etName);
 
         // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();
@@ -123,11 +124,11 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                             // Sign in success, update UI with the signed-in user's information
                             Intent intent = new Intent(RegisterActivity.this, WelcomeActivity.class);
                             intent.putExtra("email", email);
-                            intent.putExtra("password", password);
+                            intent.putExtra("name", etName.getText().toString());
                             String encodeImageToBase64 = encodeImageToBase64(imageBitmap);
                             intent.putExtra("imageBitmap", encodeImageToBase64);
                             startActivity(intent);
-
+                            finish();
                         } else {
                             // If sign in fails, display a message to the user.
                             Toast.makeText(RegisterActivity.this, "fail register", Toast.LENGTH_SHORT).show();

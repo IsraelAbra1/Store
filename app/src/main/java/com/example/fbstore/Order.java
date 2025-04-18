@@ -6,19 +6,18 @@ public class Order {
     public int quantity;
     public double price;
     public boolean delivered;
-    public String deliveryDate; // Can also use long timestamp if preferred
 
     // Required empty constructor for Firebase
     public Order() {
     }
 
-    public Order(String orderId, String productName, int quantity, double price, boolean delivered, String deliveryDate) {
+    public Order(String orderId, String productName, int quantity, double price, boolean delivered) {
         this.orderId = orderId;
         this.productName = productName;
         this.quantity = quantity;
         this.price = price;
         this.delivered = delivered;
-        this.deliveryDate = deliveryDate;
+
     }
 
     // Optional: Getters and Setters
@@ -42,9 +41,7 @@ public class Order {
         return delivered;
     }
 
-    public String getDeliveryDate() {
-        return deliveryDate;
-    }
+
 
     public void setOrderId(String orderId) {
         this.orderId = orderId;
@@ -66,8 +63,6 @@ public class Order {
         this.delivered = delivered;
     }
 
-    public void setDeliveryDate(String deliveryDate) {
-        this.deliveryDate = deliveryDate;
-    }
+
 }
 

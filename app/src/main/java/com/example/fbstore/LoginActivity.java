@@ -53,6 +53,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                 // Sign in success
                                 Intent intent = new Intent(LoginActivity.this, WelcomeActivity.class);
                                 startActivity(intent);
+                                finish();
                             } else {
                                 // If sign in fails, display a message to the user.
                                 Toast.makeText(LoginActivity.this, "login failed.", Toast.LENGTH_SHORT).show();

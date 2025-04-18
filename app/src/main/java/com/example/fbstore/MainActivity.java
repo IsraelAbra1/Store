@@ -28,12 +28,7 @@ import java.io.ByteArrayOutputStream;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private FirebaseAuth mAuth;
-    private ActivityResultLauncher<Intent> takePictureActivityResultLauncher;
-
-    private Button btnRegister, btnLogin, btnTakePicture;
-    private EditText etEmailAddress, etNumberPassword;
-    private ImageView imageView;
-    private Bitmap imageBitmap;
+    private Button btnRegister, btnLogin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,24 +39,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btnRegister.setOnClickListener(this);
         btnLogin = findViewById(R.id.btnLogin);
         btnLogin.setOnClickListener(this);
-        btnTakePicture = findViewById(R.id.btnTakePicture);
-        btnTakePicture.setOnClickListener(this);
-        imageView = findViewById(R.id.imageView);
-
-        etEmailAddress = findViewById(R.id.etEmailAddress);
-        etNumberPassword = findViewById(R.id.etNumberPassword);
 
         // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();
-
-        takePictureActivityResultLauncher = registerForActivityResult(
-                new ActivityResultContracts.StartActivityForResult(),
-                result -> {
-                    if (result.getResultCode() == RESULT_OK) {
-                        imageBitmap = (Bitmap) result.getData().getExtras().get("imageBitmap");
-                        imageView.setImageBitmap(imageBitmap);
-                    }
-                });
     }
 
     @Override
@@ -87,21 +67,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             startActivity(intent);
         }
 
-
         if(view == btnLogin)
         {
             Intent intent = new Intent(this, LoginActivity.class);
             startActivity(intent);
         }
-
-        if(view == btnTakePicture)
-        {
-            Intent intent = new Intent(this, TakePictureActivity.class);
-            takePictureActivityResultLauncher.launch(intent);
-        }
-
-
     }
-
-
 }

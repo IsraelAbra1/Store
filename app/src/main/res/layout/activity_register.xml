@@ -53,26 +53,24 @@
             android:id="@+id/btnTakePicture" />
     </LinearLayout>
 
-    <LinearLayout
+    <EditText
+        android:id="@+id/etName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="60dp"
-        android:gravity="center"
-        android:orientation="horizontal"
-        >
+        android:textSize="30dp"
+        android:hint="Enter name"
+        android:layout_marginTop="20dp"
+         />
 
         <Button
             android:id="@+id/btnRegister"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="40dp"
             android:text="Register" />
 
-        <Button
-            android:id="@+id/btnLogin"
-            android:layout_width="150dp"
-            android:layout_marginLeft="20dp"
-            android:layout_height="wrap_content"
-            android:text="Login" />
-    </LinearLayout>
+
+
 
 </LinearLayout>
