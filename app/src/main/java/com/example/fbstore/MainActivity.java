@@ -90,23 +90,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         if(view == btnLogin)
         {
-            String email = etEmailAddress.getText().toString();
-            String password = etNumberPassword.getText().toString();
-            mAuth.signInWithEmailAndPassword(email, password)
-                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-                            if (task.isSuccessful()) {
-                                // Sign in success
-                                Intent intent = new Intent(MainActivity.this, WelcomeActivity.class);
-                                startActivity(intent);
-                            } else {
-                                // If sign in fails, display a message to the user.
-                                Toast.makeText(MainActivity.this, "login failed.", Toast.LENGTH_SHORT).show();
-
-                            }
-                        }
-                    });
+            Intent intent = new Intent(this, LoginActivity.class);
+            startActivity(intent);
         }
 
         if(view == btnTakePicture)
