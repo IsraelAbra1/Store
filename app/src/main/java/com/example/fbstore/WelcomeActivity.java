@@ -30,8 +30,8 @@ public class WelcomeActivity extends AppCompatActivity implements View.OnClickLi
     private Button btnAddPrivateOrderToDB;
     private Button btnLogout;
 
-    private RecordAdapter adapter;
-    private ArrayList<MyRecord> myRecords;
+    private OrdersAdapter adapter;
+    private ArrayList<Order> myOrders;
     private FB fb;
 
     @Override
@@ -40,7 +40,7 @@ public class WelcomeActivity extends AppCompatActivity implements View.OnClickLi
         setContentView(R.layout.activity_welcome);
 
         initialization();
-        fb = new FB(this, myRecords);
+        fb = new FB(this, myOrders);
 
         Intent intent = getIntent();
         if(intent.getExtras() != null)
@@ -74,8 +74,8 @@ public class WelcomeActivity extends AppCompatActivity implements View.OnClickLi
         RecyclerView recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this)); // to be vertical
 
-        myRecords = new ArrayList<>();
-        adapter = new RecordAdapter(this, myRecords);
+        myOrders = new ArrayList<>();
+        adapter = new OrdersAdapter(this, myOrders);
         recyclerView.setAdapter(adapter);
     }
 
@@ -84,10 +84,6 @@ public class WelcomeActivity extends AppCompatActivity implements View.OnClickLi
         adapter.notifyDataSetChanged();
     }
 
-    public void userDataChange(MyRecord currentRecord) {
-        //tvWelcome.setText("" + currentRecord.getName() + " : " + currentRecord.getScore() + " points");
-        Toast.makeText(this, "userDataChange", Toast.LENGTH_SHORT).show();
-    }
 
     @Override
     public void onClick(View view) {

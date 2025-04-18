@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -11,17 +12,17 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
-public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.UserViewHolder> {
+public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.UserViewHolder> {
 
     //this context we will use to inflate the layout
     private Context context;
 
     //storing all the records in a list
-    private List<MyRecord> recordsList;
+    private List<Order> ordersList;
 
-    public RecordAdapter(Context context, List<MyRecord> recordsList) {
+    public OrdersAdapter(Context context, List<Order> ordersList) {
         this.context = context;
-        this.recordsList = recordsList;
+        this.ordersList = ordersList;
     }
 
     @NonNull
@@ -38,31 +39,35 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.UserViewHo
     public void onBindViewHolder(@NonNull UserViewHolder holder, int position) {
         // read eachtime from arraylist object and write to listview Item
         //getting the record of the specified position
-        MyRecord record = recordsList.get(position);
+        Order order = ordersList.get(position);
 
         // TODO: update according to your Class
-        holder.tvName.setText(record.getName());
-
-        // convert int to String by:  ""+int
-        holder.tvRecord.setText(""+record.getScore());
+        holder.tvProductName.setText("ProductName: " + order.getProductName());
+        holder.tvQuantity.setText("Quantity: "+order.getQuantity());
+        holder.tvPrice.setText("Price: "+order.getPrice());
+        holder.boolSwitch.setChecked(order.isDelivered());
 
     }
 
     @Override
     public int getItemCount() {
-        return recordsList.size();
+        return ordersList.size();
     }
 
 
     public class UserViewHolder extends RecyclerView.ViewHolder{
-        TextView tvName, tvRecord;
+        //TextView tvName, tvRecord;
+        TextView tvProductName, tvQuantity, tvPrice;
+        Switch boolSwitch;
 
         public UserViewHolder(@NonNull View itemView) {
             super(itemView);
 
             // TODO:
-            tvName = itemView.findViewById(R.id.tvName);
-            tvRecord = itemView.findViewById(R.id.tvScore);
+            tvProductName = itemView.findViewById(R.id.tvProductName);
+            tvQuantity = itemView.findViewById(R.id.tvQuantity);
+            tvPrice = itemView.findViewById(R.id.tvPrice);
+            boolSwitch = itemView.findViewById(R.id.switchDelivered);
         }
     }
 }

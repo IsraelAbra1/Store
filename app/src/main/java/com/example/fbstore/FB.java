@@ -22,89 +22,32 @@ import java.util.ArrayList;
 public class FB {
     FirebaseDatabase database;
     Context context;
-    ArrayList<MyRecord> myRecords;
-    public FB(Context context, ArrayList<MyRecord> myRecords) {
+    ArrayList<Order> myOrders;
+    public FB(Context context, ArrayList<Order> myOrders) {
         //database = FirebaseDatabase.getInstance("https://fbrecordst-default-rtdb.firebaseio.com");
         database = FirebaseDatabase.getInstance();
         this.context = context;
-        this.myRecords = myRecords;
+        this.myOrders = myOrders;
 
-        // read the records from the Firebase and order them by the record from highest to lowest
-        // limit to only 8 items
-        Query myQuery = database.getReference("records").orderByChild("score").limitToLast(8);
+        Query myQuery = database.getReference("user_data/" + FirebaseAuth.getInstance().getUid() + "/orders");
 
         myQuery.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                myRecords.clear();  // clear the array list
+                myOrders.clear();  // clear the array list
                 for(DataSnapshot userSnapshot : snapshot.getChildren())
                 {
-                    MyRecord currentMyRecord =userSnapshot.getValue(MyRecord.class);
-                    myRecords.add(0, currentMyRecord);
+                    Order currentMyRecord =userSnapshot.getValue(Order.class);
+                    myOrders.add(0, currentMyRecord);
                 }
-/*                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    users.sort(new Comparator<User>() {
-                        @Override
-                        public int compare(User user, User t1) {
-                            return 0;
-                        }
-                    });
-                }*/
+
                 ((WelcomeActivity)context).dataChange();
-
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
             }
         });
-
-        DatabaseReference myRef = database.getReference(FirebaseAuth.getInstance().getUid());
-        myRef = database.getReference("records/" + FirebaseAuth.getInstance().getUid());
-        //DatabaseReference myRef = database.getReference().child(FirebaseAuth.getInstance().getUid());
-        myRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                MyRecord currentRecord =snapshot.getValue(MyRecord.class);
-                if(currentRecord != null)
-                {
-                    ((WelcomeActivity)context).userDataChange(currentRecord);
-                }
-                else
-                    Log.d("TAG", "onDataChange: ");
-
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                //Toast.makeText(context, "name onCancelled", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-
-    }
-
-    public void setRecord(String name, int record)
-    {
-        // Write a message to the database
-        DatabaseReference myRef = database.getReference("records").push(); // push adds new node with unique value
-
-        //DatabaseReference myRef = database.getReference("records/" + FirebaseAuth.getInstance().getUid());
-
-        MyRecord rec = new MyRecord(name, record);
-        myRef.setValue(rec);
-    }
-
-    public void setPrivateRecord(String name, int record)
-    {
-        // Write a message to the database
-        //DatabaseReference myRef = database.getReference("records").push(); // push adds new node with unique value
-
-        DatabaseReference myRef = database.getReference("records/" + FirebaseAuth.getInstance().getUid());
-
-        MyRecord rec = new MyRecord(name, record);
-        myRef.setValue(rec);
     }
 
     public void setUserData(String email, String name, String profileImage)
