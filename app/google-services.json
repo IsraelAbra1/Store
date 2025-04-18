@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "403651750827",
+    "project_id": "fbstore-f1938",
+    "storage_bucket": "fbstore-f1938.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:403651750827:android:dd075c69c23746df58c0ee",
+        "android_client_info": {
+          "package_name": "com.example.fbstore"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB9slE4e-m2jv8Jf4yzrX0oA_Tsvw3tcTc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
